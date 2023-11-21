@@ -1,0 +1,37 @@
+ion-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  
+  .lista-clases {
+    max-width: 300px; /* Ajusta el ancho máximo según tus preferencias */
+    width: 100%;
+    margin: auto;
+  }
+  
+  .detalle-clase {
+    max-width: 300px; /* Ajusta el ancho máximo según tus preferencias */
+    width: 100%;
+    margin: auto;
+    margin-top: 20px; /* Agregado para separar el detalle de la lista */
+  }
+  .detalle-container {
+    padding: 16px;
+  
+    ion-list {
+      margin-bottom: 16px;
+    }
+  
+    ion-item {
+      --ion-item-background: #f8f8f8;
+      --ion-item-text-color: #333;
+      --ion-label-color: #555;
+    }
+  
+    ion-button {
+      --ion-color-primary: #3880ff;
+    }
+  }
