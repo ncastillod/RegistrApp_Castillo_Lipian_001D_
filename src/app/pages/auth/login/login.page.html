@@ -33,6 +33,16 @@
         <div *ngIf="form.controls.email.errors?.['email']">Ingrese un correo válido</div>
       </div>
 
+      <!--personalEMAIL-->
+      <app-custom-input autocomplete="personalEmail" icon="mail-outline" [control]="form.controls.personalEmail" type="email"
+        label="Correo personal"></app-custom-input>
+      <div class="Validators" *ngIf="form.controls.email.errors && form.controls.email.touched">
+        <!-- Corrección: Accede a 'email' usando ['email'] -->
+        <div *ngIf="form.controls.email.errors?.['required']">El correo es requerido</div>
+        <!-- Corrección: Accede a 'email' usando ['email'] -->
+        <div *ngIf="form.controls.email.errors?.['email']">Ingrese un correo válido</div>
+      </div>
+
       <!--CONTRASENA-->
       <app-custom-input [control]="form.controls.password" icon="lock-closed-outline" type="password" label="Contraseña"
         icon="lock-closed-outline">

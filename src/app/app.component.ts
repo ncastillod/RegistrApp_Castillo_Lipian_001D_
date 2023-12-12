@@ -15,7 +15,7 @@ interface Componente {
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
- 
+
 
   componentes: Componente[] = [
     {
@@ -47,13 +47,13 @@ export class AppComponent {
 
   ]
 
-  
+
   metodo() {
     if (localStorage.getItem("ingresado") && localStorage.getItem("esDocente") == 'false') {
       return this.componentes.filter(c => {
         return !(c.name == "Registrate" || c.name == "Iniciar Sesion" || c.name == "Generar QR")
       });
-    }if (localStorage.getItem("ingresado") && localStorage.getItem("esDocente")) {
+    } if (localStorage.getItem("ingresado") && localStorage.getItem("esDocente")) {
       return this.componentes.filter(c => {
         return !(c.name == "Registrate" || c.name == "Iniciar Sesion")
       });
@@ -63,18 +63,28 @@ export class AppComponent {
       });
     }
   }
-  
 
-  
-  
+
+
+
 
 
   constructor(
-    private router: Router
+    private router: Router,
+    private afAuth: AngularFireAuth
   ) { }
+
   onClick() {
     this.router.navigate(['inicio'])
     localStorage.clear()
   }
-}
 
+  async logout() {
+    try {
+      await this.afAuth.signOut();
+      this.router.navigate(['/auth']); // Redirige a la página de inicio de sesión después del cierre de sesión
+    } catch (error) {
+      console.error('Error al cerrar sesión', error);
+    }
+  }
+}

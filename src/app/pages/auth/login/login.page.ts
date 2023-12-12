@@ -15,6 +15,7 @@ export class LoginPage implements OnInit {
   form = new FormGroup({
     uid: new FormControl(''),
     email: new FormControl('', [Validators.required, Validators.email]),
+    personalEmail: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
   })
@@ -37,7 +38,10 @@ export class LoginPage implements OnInit {
       await loading.present();
       await this.firebaseSvc.signUp(this.form.value as User).then(async res => {
 
+        
         this.firebaseSvc.updateUser(this.form.value.name);
+        
+        
         let uid = res.user.uid;
         this.form.controls.uid.setValue(uid);
 

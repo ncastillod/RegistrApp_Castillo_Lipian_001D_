@@ -28,7 +28,13 @@
           <ion-text>{{ usuario?.email || 'No disponible' }}</ion-text>
         </ion-item>
 
-        
+        <ion-item *ngIf="firstUser">
+          <ion-label>Correo Personal:</ion-label>
+          <ion-text>{{ firstUser.personalEmail || 'No Disponible' }}</ion-text>
+
+          <ion-button (click)="editarPersonalEmail()">Editar</ion-button>
+        </ion-item>
+
       </ion-list>
     </ion-card-content>
   </ion-card>
