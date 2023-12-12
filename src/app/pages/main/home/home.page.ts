@@ -3,7 +3,11 @@ import { MenuController } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 
+
+import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
+import { AlertController } from '@ionic/angular';
 import { FirebaseService } from 'src/app/services/firebase.service';
+
 
 @Component({
   selector: 'app-home',
@@ -11,11 +15,25 @@ import { FirebaseService } from 'src/app/services/firebase.service';
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
+
+  
   qrCodeString= 'String qr';
 
   uid: string | null = null;
 
-  constructor(private menuController: MenuController, private authService: AuthService,) { }
+  axes: string;
+
+  isSupported = false;
+
+  barcodes: Barcode[] = [];
+
+  constructor(
+    private menuController: MenuController, 
+    private authService: AuthService,
+    private alertController: AlertController
+    ) {
+      this.axes = ''
+     }
 
   ngOnInit() {
    
@@ -23,6 +41,11 @@ export class HomePage implements OnInit {
     // Inicializar el UID al cargar el componente
     this.authService.getUid().subscribe(uid => {
       this.uid = uid;
+    });
+
+
+    BarcodeScanner.isSupported().then((result) => {
+      this.isSupported = result.supported;
     });
   }
 
@@ -37,32 +60,38 @@ export class HomePage implements OnInit {
     console.log('UID del usuario:', this.uid);
   }
 
-  
 
-  escanearCodigoQR() {
-    // Lógica de escaneo de código QR (puede estar vacía para un marcador de posición).
+  async scan(): Promise<void> {
+    const granted = await this.requestPermissions();
+    if (!granted) {
+      this.presentAlert();
+      return;
+    }
+    const { barcodes } = await BarcodeScanner.scan();
+    this.barcodes.push(...barcodes);
   }
 
-
-  // Ejemplo de función para iniciar sesión
-  login() {
-    this.authService.login('correo@ejemplo.com', 'contraseña123')
-      .then(response => {
-        console.log('Inicio de sesión exitoso', response);
-      })
-      .catch(error => {
-        console.error('Error al iniciar sesión', error);
-      });
+  async requestPermissions(): Promise<boolean> {
+    const { camera } = await BarcodeScanner.requestPermissions();
+    return camera === 'granted' || camera === 'limited';
   }
 
-  // Ejemplo de función para cerrar sesión
-  logout() {
-    this.authService.logout()
-      .then(() => {
-        console.log('Cierre de sesión exitoso');
-      })
-      .catch(error => {
-        console.error('Error al cerrar sesión', error);
-      });
+  async presentAlert(): Promise<void> {
+    const alert = await this.alertController.create({
+      header: 'Permission denied',
+      message: 'Please grant camera permission to use the barcode scanner.',
+      buttons: ['OK'],
+    });
+    await alert.present();
   }
 }
+
+  
+
+  
+
+  
+
+  
+
+

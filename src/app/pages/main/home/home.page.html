@@ -15,23 +15,27 @@
   </div>
   <br><br><br>
   <br>
+
+
+  
+  
   
   <div class="btn" >
-    <ion-button 
-    expand="block" 
-    fill="outline" 
-    shape="round" 
-    color="warning"
-    >
-      Escanear QR
-    </ion-button>
     
-    <ion-item>
-      <ion-label class="ion-text-wrap">
-        Resultados de Scaneo: 
-      </ion-label>
-    </ion-item>
+    <ion-fab slot="fixed" >
+      <ion-button xpand="block" fill="outline" shape="round" color="warning" (click)="scan()" [disabled]="!isSupported">
+        Escanear QR <ion-icon name="scan"></ion-icon>
+      </ion-button>
+    </ion-fab>
+    
+    <ion-item *ngFor="let barcode of barcodes">
+      <ion-label position="stacked">{{ barcode.format }}</ion-label>
+      <ion-input type="text" [value]="barcode.rawValue"></ion-input>
+    </ion-item> 
+    
   </div>
+
+  
 
   <br>
   <br>
